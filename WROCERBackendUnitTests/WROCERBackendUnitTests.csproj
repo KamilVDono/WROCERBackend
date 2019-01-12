@@ -17,8 +17,4 @@
     <ProjectReference Include="..\WROCERBackend\WROCERBackend.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="DataTests\" />
-  </ItemGroup>
-
 </Project>
