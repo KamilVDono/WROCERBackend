@@ -6,12 +6,12 @@ namespace WROCERBackend.Model.DataDirectAccess
 {
 	public interface IDataDirectAccess
 	{
-		IEnumerable<T> GetAll<T>();
-		T GetItem<T>(long id);
-		bool AddItem<T>(T item);
-		bool UpdateItem<T>(T item);
-		bool RemoveItem<T>(T item);
+		IEnumerable<T> GetAll<T>() where T : AbstractDataModel;
+		T GetItem<T>(long id) where T : AbstractDataModel;
+		bool AddItem<T>(T item) where T : AbstractDataModel;
+		bool UpdateItem<T>(T item) where T : AbstractDataModel;
+		bool RemoveItem<T>(T item) where T : AbstractDataModel;
 		bool HasModel(Type modelType);
-		bool HasModel<T>();
+		bool HasModel<T>() where T : AbstractDataModel;
 	}
 }

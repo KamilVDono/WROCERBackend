@@ -8,31 +8,57 @@ namespace WROCERBackend.Model.DataDirectAccess
 {
 	public class FakeDatabase : IDataDirectAccess
 	{
-		private readonly Dictionary<Type, List<IDataModel>> _Data = new Dictionary<Type, List<IDataModel>>();
+		private readonly Dictionary<Type, List<AbstractDataModel>> _Data = new Dictionary<Type, List<AbstractDataModel>>();
 
 		public FakeDatabase()
 		{
 			FillData();
 		}
 
-		public FakeDatabase(Dictionary<Type, List<IDataModel>> data)
+		public FakeDatabase(Dictionary<Type, List<AbstractDataModel>> data)
 		{
 			_Data = data;
 		}
 
-		public bool AddItem<T>(T item)
+		public bool AddItem<T>(T item) where T : AbstractDataModel
 		{
-			throw new NotImplementedException();
+			if (HasModel<T>() && item != null)
+			{
+				var list = _Data[typeof(T)];
+
+				if (item.ID == 0)
+				{
+					long lastID = list.Max(i => i.ID);
+					item.ID = lastID + 1;
+					list.Add(item);
+				}
+				else
+				{
+					if (list.Contains(item)) return false;
+
+					list.Add(item);
+				}
+				return true;
+			}
+
+			return false;
 		}
 
-		public IEnumerable<T> GetAll<T>()
+		public IEnumerable<T> GetAll<T>() where T : AbstractDataModel
 		{
-			throw new NotImplementedException();
+			if (HasModel<T>())
+			{
+				var list = _Data[typeof(T)];
+
+				return list.Cast<T>();
+			}
+
+			return null;
 		}
 
-		public T GetItem<T>(long id)
+		public T GetItem<T>(long id) where T : AbstractDataModel
 		{
-			throw new NotImplementedException();
+			return GetAll<T>()?.FirstOrDefault(item => item.ID == id);
 		}
 
 		public bool HasModel(Type modelType)
@@ -40,30 +66,50 @@ namespace WROCERBackend.Model.DataDirectAccess
 			return _Data.ContainsKey(modelType);
 		}
 
-		public bool HasModel<T>()
+		public bool HasModel<T>() where T : AbstractDataModel
 		{
 			return HasModel(typeof(T));
 		}
 
-		public bool RemoveItem<T>(T item)
+		public bool RemoveItem<T>(T item) where T : AbstractDataModel
 		{
-			throw new NotImplementedException();
+			if (HasModel<T>() && item != null)
+			{
+				var list = _Data[typeof(T)];
+
+				if (list.Contains(item) == false) return false;
+
+				list.Remove(item);
+				return true;
+			}
+
+			return false;
 		}
 
-		public bool UpdateItem<T>(T item)
+		public bool UpdateItem<T>(T item) where T : AbstractDataModel
 		{
-			throw new NotImplementedException();
+			if (HasModel<T>() && item != null)
+			{
+				var list = _Data[typeof(T)];
+
+				if (list.Contains(item) == false) return false;
+
+				list[list.IndexOf(item)] = item;
+				return true;
+			}
+
+			return false;
 		}
 
 		private void FillData()
 		{
-			_Data.Add(typeof(DataSezon), new List<IDataModel>()
+			_Data.Add(typeof(DataSezon), new List<AbstractDataModel>()
 			{
 				new DataSezon(){ID = 1, Rok = 2018},
 				new DataSezon(){ID = 2, Rok = 2019},
 			});
 
-			_Data.Add(typeof(DataMecz), new List<IDataModel>()
+			_Data.Add(typeof(DataMecz), new List<AbstractDataModel>()
 			{
 				new DataMecz(){ID = 1, Sezon = 1, Tremin = (new DateTime(2018, 1, 5, 18, 00, 00)).Ticks},
 				new DataMecz(){ID = 2, Sezon = 1, Tremin = (new DateTime(2018, 2, 5, 18, 00, 00)).Ticks},
