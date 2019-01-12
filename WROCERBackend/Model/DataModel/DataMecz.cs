@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace WROCERBackend.Model.DataModel
 {
-	public class DataMecz
+	public class DataMecz: AbstractDataModel
 	{
 		[Required]
-		public long ID { get; set; }
+		public override long ID { get; set; }
 
 		[ForeignKey("DataSezon")]
 		public long Sezon { get; set; }

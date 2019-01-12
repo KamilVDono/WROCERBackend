@@ -6,11 +6,9 @@ using System.Threading.Tasks;
 
 namespace WROCERBackend.Model.DataModel
 {
-	public class DataSezon: AbstractDataModel
+	public interface IDataModel
 	{
 		[Required]
-		public override long ID { get; set; }
-
-		public int Rok { get; set; }
+		long ID { get; set; }
 	}
 }
