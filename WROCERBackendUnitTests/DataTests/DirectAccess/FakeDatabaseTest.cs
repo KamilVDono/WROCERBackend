@@ -13,20 +13,20 @@ namespace WROCERBackendUnitTests.DataTests.DirectAccess
 
 		public FakeDatabaseTest()
 		{
-			Dictionary<Type, List<IDataModel>> _Data = new Dictionary<Type, List<IDataModel>>();
+			Dictionary<Type, List<AbstractDataModel>> _Data = new Dictionary<Type, List<AbstractDataModel>>();
 			FillTestData(_Data);
 			_Database = new FakeDatabase(_Data);
 		}
 
-		private static void FillTestData(Dictionary<Type, List<IDataModel>> _Data)
+		private static void FillTestData(Dictionary<Type, List<AbstractDataModel>> _Data)
 		{
-			_Data.Add(typeof(DataSezon), new List<IDataModel>()
+			_Data.Add(typeof(DataSezon), new List<AbstractDataModel>()
 			{
 				new DataSezon() {ID = 1, Rok = 2018},
 				new DataSezon() {ID = 2, Rok = 2019},
 			});
 
-			_Data.Add(typeof(DataMecz), new List<IDataModel>()
+			_Data.Add(typeof(DataMecz), new List<AbstractDataModel>()
 			{
 				new DataMecz() {ID = 1, Sezon = 1, Tremin = (new DateTime(2018, 1, 5, 18, 00, 00)).Ticks},
 				new DataMecz() {ID = 2, Sezon = 1, Tremin = (new DateTime(2018, 2, 5, 18, 00, 00)).Ticks},
@@ -40,8 +40,8 @@ namespace WROCERBackendUnitTests.DataTests.DirectAccess
 		[Fact]
 		public void HasModel_FakeDataModel()
 		{
-			bool hasGeneric = _Database.HasModel<FakeDatabase>();
-			bool hasType = _Database.HasModel(typeof(FakeDatabase));
+			bool hasGeneric = _Database.HasModel<FakeDataModel>();
+			bool hasType = _Database.HasModel(typeof(FakeDataModel));
 
 			Assert.False(hasGeneric);
 			Assert.False(hasType);
@@ -72,7 +72,6 @@ namespace WROCERBackendUnitTests.DataTests.DirectAccess
 		{
 			var models = _Database.GetAll<FakeDataModel>();
 
-			Assert.IsAssignableFrom<IEnumerable<FakeDataModel>>(models);
 			Assert.Null(models);
 		}
 
@@ -101,7 +100,6 @@ namespace WROCERBackendUnitTests.DataTests.DirectAccess
 		{
 			var model = _Database.GetItem<FakeDataModel>(0);
 
-			Assert.IsType<FakeDataModel>(model);
 			Assert.Null(model);
 		}
 
@@ -111,8 +109,6 @@ namespace WROCERBackendUnitTests.DataTests.DirectAccess
 			var modelZero = _Database.GetItem<DataSezon>(0);
 			var modelTen = _Database.GetItem<DataSezon>(10);
 
-			Assert.IsType<DataSezon>(modelZero);
-			Assert.IsType<DataSezon>(modelTen);
 			Assert.Null(modelZero);
 			Assert.Null(modelTen);
 		}
@@ -124,6 +120,74 @@ namespace WROCERBackendUnitTests.DataTests.DirectAccess
 
 			Assert.IsType<DataMecz>(model);
 			Assert.Equal(1, model.ID);
+		}
+
+		[Fact]
+		public void AddItem_Null()
+		{
+			bool success = _Database.AddItem<DataSezon>(null);
+
+			Assert.False(success);
+		}
+
+		[Fact]
+		public void AddItem_WithSameId()
+		{
+			bool success = _Database.AddItem<DataSezon>(new DataSezon(){ID = 1, Rok = 2020});
+
+			Assert.False(success);
+		}
+
+		[Fact]
+		public void AddItem_NewWithID()
+		{
+			bool success = _Database.AddItem<DataSezon>(new DataSezon() { ID = 3, Rok = 2020});
+
+			Assert.True(success);
+		}
+
+		[Fact]
+		public void AddItem_NewWithoutID()
+		{
+			long biggestId = _Database.GetAll<DataSezon>().Max(i => i.ID);
+			var item = new DataSezon() {Rok = 2020};
+			bool success = _Database.AddItem<DataSezon>(item);
+
+			Assert.True(success);
+			Assert.Equal(biggestId+1, item.ID);
+		}
+
+		[Fact]
+		public void UpdateItem_Null()
+		{
+			bool success = _Database.UpdateItem<DataSezon>(null);
+
+			Assert.False(success);
+		}
+
+		[Fact]
+		public void UpdateItem_NoExisting()
+		{
+			var item = new DataSezon() {ID = 4, Rok = 2020};
+			//_Database.AddItem(item);
+			item.Rok = 2021;
+			bool success = _Database.UpdateItem<DataSezon>(item);
+
+			Assert.False(success);
+		}
+
+		[Fact]
+		public void UpdateItem_Existing()
+		{
+			var item = new DataSezon() { Rok = 2020 };
+			_Database.AddItem(item);
+			item.Rok = 2021;
+			bool success = _Database.UpdateItem<DataSezon>(item);
+
+			int inBaseRok = _Database.GetItem<DataSezon>(item.ID).Rok;
+
+			Assert.True(success);
+			Assert.Equal(2021, inBaseRok);
 		}
 	}
 }
