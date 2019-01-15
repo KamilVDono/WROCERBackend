@@ -5,9 +5,11 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using WROCERBackend.Model.DataAccess;
+using WROCERBackend.Model.DataDirectAccess;
 
 namespace WROCERBackend
 {
@@ -24,8 +26,10 @@ namespace WROCERBackend
 		// For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
 		public void ConfigureServices(IServiceCollection services)
 		{
+			services.AddDbContext<DatabaseContext>(options =>
+				options.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=aspnet-WROCER;Trusted_Connection=True;MultipleActiveResultSets=true"));
+			services.AddScoped<IDataAccess, WrocerDataAccess>(sp => new WrocerDataAccess(new List<IDataDirectAccess>(){ sp.GetRequiredService<DatabaseContext>() }));
 			services.AddMvc();
-			services.AddScoped<IDataAccess, WrocerDataAccess>();
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -37,6 +41,7 @@ namespace WROCERBackend
 			}
 
 			app.UseStaticFiles();
+			app.UseAuthentication();
 
 			app.UseMvc(routes =>
 			{
