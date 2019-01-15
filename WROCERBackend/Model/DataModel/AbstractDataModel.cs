@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -7,7 +8,8 @@ namespace WROCERBackend.Model.DataModel
 {
 	public abstract class AbstractDataModel : IDataModel, IEqualityComparer<AbstractDataModel>, IEquatable<AbstractDataModel>
 	{
-		public abstract long ID { get; set; }
+		[Key]
+		public long ID { get; set; }
 
 		public bool Equals(AbstractDataModel left, AbstractDataModel right)
 		{

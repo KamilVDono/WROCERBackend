@@ -8,7 +8,5 @@ namespace WROCERBackendUnitTests.DataTests.DirectAccess
 {
 	public class FakeDataModel: AbstractDataModel
 	{
-		[Required]
-		public override long ID { get; set; }
 	}
 }

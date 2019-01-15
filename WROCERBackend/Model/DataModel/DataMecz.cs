@@ -1,20 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace WROCERBackend.Model.DataModel
-{
-	public class DataMecz: AbstractDataModel
+using System;
+namespace WROCERBackend.Model.DataModel {
+	public class DataMecz : AbstractDataModel
 	{
-		[Required]
-		public override long ID { get; set; }
 
-		[ForeignKey("DataSezon")]
-		public long Sezon { get; set; }
+		public long Termin { get; set; }
 
-		public long Tremin { get; set; }
+		public DataUzytkownik Sedzia{ get; set; } 
+		public DataDruzyna Gospodarz{ get; set; } 
+		public DataDruzyna Gosc{ get; set; } 
+
+		public DataSezon Sezon{ get; set; } 
+
 	}
+
 }

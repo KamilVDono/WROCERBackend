@@ -14,27 +14,8 @@ namespace WROCERBackendUnitTests.DataTests.DirectAccess
 		public FakeDatabaseTest()
 		{
 			Dictionary<Type, List<AbstractDataModel>> _Data = new Dictionary<Type, List<AbstractDataModel>>();
-			FillTestData(_Data);
+			FakeDatabase.FillData(_Data);
 			_Database = new FakeDatabase(_Data);
-		}
-
-		private static void FillTestData(Dictionary<Type, List<AbstractDataModel>> _Data)
-		{
-			_Data.Add(typeof(DataSezon), new List<AbstractDataModel>()
-			{
-				new DataSezon() {ID = 1, Rok = 2018},
-				new DataSezon() {ID = 2, Rok = 2019},
-			});
-
-			_Data.Add(typeof(DataMecz), new List<AbstractDataModel>()
-			{
-				new DataMecz() {ID = 1, Sezon = 1, Tremin = (new DateTime(2018, 1, 5, 18, 00, 00)).Ticks},
-				new DataMecz() {ID = 2, Sezon = 1, Tremin = (new DateTime(2018, 2, 5, 18, 00, 00)).Ticks},
-				new DataMecz() {ID = 3, Sezon = 1, Tremin = (new DateTime(2018, 3, 5, 18, 00, 00)).Ticks},
-				new DataMecz() {ID = 4, Sezon = 2, Tremin = (new DateTime(2019, 4, 5, 18, 00, 00)).Ticks},
-				new DataMecz() {ID = 5, Sezon = 2, Tremin = (new DateTime(2019, 5, 5, 18, 00, 00)).Ticks},
-				new DataMecz() {ID = 6, Sezon = 2, Tremin = (new DateTime(2019, 6, 5, 18, 00, 00)).Ticks},
-			});
 		}
 
 		[Fact]
