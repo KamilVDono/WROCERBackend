@@ -41,9 +41,9 @@ namespace WROCERBackend.Controller
 			return Ok(item);
 		}
 
-		// POST: api/Mecz
-		[HttpPost]
-		public ActionResult Post([FromBody] DataMecz value)
+		// POST: api/Mecz/sezon/id/sedzia/id/gospodarz
+		[HttpPost("sezon/{idSezon}/sedzia/{idSedzia}/gospodarz/{idGospodarz}/gosc/{idGosc}")]
+		public ActionResult Post(int idSezon, int idSedzia, int idGospodarz, int idGosc, [FromBody] DataMecz value)
 		{
 			if (!ModelState.IsValid)
 			{
@@ -72,23 +72,12 @@ namespace WROCERBackend.Controller
 				return BadRequest(ModelState);
 			}
 
-			if (value == null)
+			if (value == null || _DataAccess.UpdateItem(value) == false)
 			{
 				return NotFound();
 			}
 
-			value.ID = id;
-
-			var success = _DataAccess.AddItem(value);
-
-			if (success)
-			{
-				return CreatedAtAction("Get", value);
-			}
-			else
-			{
-				return NotFound();
-			}
+			return Ok();
 		}
 
 		// DELETE: api/ApiWithActions/5
