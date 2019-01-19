@@ -26,6 +26,7 @@ namespace WROCERBackend.Model.DataDirectAccess
 				{ typeof(DataUzytkownikTyp), () => DataUzytkownikTyps.Cast<AbstractDataModel>().AsEnumerable()},
 				{ typeof(DataZawodnik), () => DataZawodniks.Cast<AbstractDataModel>().AsEnumerable()},
 				{ typeof(DataZmiana), () => DataZmianas.Cast<AbstractDataModel>().AsEnumerable()},
+				{ typeof(DataSklad), () => DataSklads.Cast<AbstractDataModel>().AsEnumerable()},
 			};
 
 			_DataDictionaryUpdate = new Dictionary<Type, Action<AbstractDataModel>>()
@@ -42,6 +43,7 @@ namespace WROCERBackend.Model.DataDirectAccess
 				{ typeof(DataUzytkownikTyp), (d) => DataUzytkownikTyps.Update((DataUzytkownikTyp)d)},
 				{ typeof(DataZawodnik), (d) => DataZawodniks.Update((DataZawodnik)d)},
 				{ typeof(DataZmiana), (d) => DataZmianas.Update((DataZmiana)d)},
+				{ typeof(DataSklad), (d) => DataSklads.Update((DataSklad)d)},
 			};
 
 			_DataDictionaryAdd = new Dictionary<Type, Action<AbstractDataModel>>()
@@ -58,6 +60,7 @@ namespace WROCERBackend.Model.DataDirectAccess
 				{ typeof(DataUzytkownikTyp), (d) => DataUzytkownikTyps.Add((DataUzytkownikTyp)d)},
 				{ typeof(DataZawodnik), (d) => DataZawodniks.Add((DataZawodnik)d)},
 				{ typeof(DataZmiana), (d) => DataZmianas.Add((DataZmiana)d)},
+				{ typeof(DataSklad), (d) => DataSklads.Add((DataSklad)d)},
 			};
 
 			_DataDictionaryRemove = new Dictionary<Type, Action<AbstractDataModel>>()
@@ -74,6 +77,7 @@ namespace WROCERBackend.Model.DataDirectAccess
 				{ typeof(DataUzytkownikTyp), (d) => DataUzytkownikTyps.Remove((DataUzytkownikTyp)d)},
 				{ typeof(DataZawodnik), (d) => DataZawodniks.Remove((DataZawodnik)d)},
 				{ typeof(DataZmiana), (d) => DataZmianas.Remove((DataZmiana)d)},
+				{ typeof(DataSklad), (d) => DataSklads.Remove((DataSklad)d)},
 			};
 		}
 
@@ -89,6 +93,7 @@ namespace WROCERBackend.Model.DataDirectAccess
 		public DbSet<DataUzytkownikTyp> DataUzytkownikTyps { get; set; }
 		public DbSet<DataZawodnik> DataZawodniks { get; set; }
 		public DbSet<DataZmiana> DataZmianas { get; set; }
+		public DbSet<DataSklad> DataSklads { get; set; }
 
 		private readonly Dictionary<Type, Func<IEnumerable<AbstractDataModel>>> _DataDictionaryGet;
 		private readonly Dictionary<Type, Action<AbstractDataModel>> _DataDictionaryUpdate;
