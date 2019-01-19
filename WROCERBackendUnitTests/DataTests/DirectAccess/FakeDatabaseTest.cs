@@ -170,5 +170,14 @@ namespace WROCERBackendUnitTests.DataTests.DirectAccess
 			Assert.True(success);
 			Assert.Equal(2021, inBaseRok);
 		}
+
+		[Fact]
+		public void Item_Eq()
+		{
+			var item1 = new DataSezon() {ID = 1};
+			var item2 = new DataSezon() { ID = 1 };
+
+			Assert.True(item1 == item2);
+		}
 	}
 }

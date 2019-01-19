@@ -25,5 +25,20 @@ namespace WROCERBackend.Model.DataModel
 		{
 			return ID.GetHashCode();
 		}
+
+		public static bool operator ==(AbstractDataModel left, AbstractDataModel right)
+		{
+			if (ReferenceEquals(left, null))
+			{
+				return ReferenceEquals(right, null);
+			}
+			if (ReferenceEquals(right, null)) return false;
+			return left.Equals(right);
+		}
+
+		public static bool operator !=(AbstractDataModel left, AbstractDataModel right)
+		{
+			return !(left == right);
+		}
 	}
 }

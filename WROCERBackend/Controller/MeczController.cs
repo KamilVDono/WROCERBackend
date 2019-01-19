@@ -50,6 +50,35 @@ namespace WROCERBackend.Controller
 				return BadRequest(ModelState);
 			}
 
+			var sezon = _DataAccess.GetItem<DataSezon>(idSezon);
+			if (sezon == null)
+			{
+				return NotFound();
+			}
+
+			var sedzia = _DataAccess.GetItem<DataUzytkownik>(idSedzia);
+			if (sedzia == null)
+			{
+				return NotFound();
+			}
+
+			var gospodarz = _DataAccess.GetItem<DataDruzyna>(idGospodarz);
+			if (gospodarz == null)
+			{
+				return NotFound();
+			}
+
+			var gosc = _DataAccess.GetItem<DataDruzyna>(idGosc);
+			if (gosc == null)
+			{
+				return NotFound();
+			}
+
+			value.Sezon = sezon;
+			value.Sedzia = sedzia;
+			value.Gospodarz = gospodarz;
+			value.Gosc = gosc;
+
 			var success = _DataAccess.AddItem(value);
 
 			if (success)
