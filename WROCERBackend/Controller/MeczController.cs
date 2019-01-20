@@ -11,10 +11,8 @@ namespace WROCERBackend.Controller
 {
 	[Route("api/[controller]")]
 	[ApiController]
-	public class MeczController : ControllerBase
+	public class MeczController : BaseController<DataMecz>
 	{
-		private readonly IDataAccess _DataAccess;
-
 		public MeczController(IDataAccess dataAccess)
 		{
 			_DataAccess = dataAccess;
@@ -24,21 +22,14 @@ namespace WROCERBackend.Controller
 		[HttpGet]
 		public ActionResult<IEnumerable<DataMecz>> Get()
 		{
-			return Ok(_DataAccess.GetAll<DataMecz>());
+			return Ok(GetAll());
 		}
 
 		// GET: api/Mecz/5
-		[HttpGet("{id}", Name = "Get")]
+		[HttpGet("{id}", Name = "GetMecz")]
 		public ActionResult<DataMecz> Get(int id)
 		{
-			var item = _DataAccess.GetItem<DataMecz>(id);
-
-			if (item == null)
-			{
-				return NotFound();
-			}
-
-			return Ok(item);
+			return TryGet(id);
 		}
 
 		// POST: api/Mecz/sezon/id/sedzia/id/gospodarz
@@ -79,57 +70,21 @@ namespace WROCERBackend.Controller
 			value.Gospodarz = gospodarz;
 			value.Gosc = gosc;
 
-			var success = _DataAccess.AddItem(value);
-
-			if (success)
-			{
-				return CreatedAtAction("Get", value);
-			}
-			else
-			{
-				return Conflict("Can not add element");
-			}
-			
+			return TryPost(value);
 		}
 
 		// PUT: api/Mecz/5
 		[HttpPut("{id}")]
 		public ActionResult Put(int id, [FromBody] DataMecz value)
 		{
-			if (!ModelState.IsValid)
-			{
-				return BadRequest(ModelState);
-			}
-
-			if (value == null || _DataAccess.UpdateItem(value) == false)
-			{
-				return NotFound();
-			}
-
-			return Ok();
+			return TryPut(id, value);
 		}
 
 		// DELETE: api/ApiWithActions/5
 		[HttpDelete("{id}")]
 		public ActionResult Delete(int id)
 		{
-			var mecz = _DataAccess.GetItem<DataMecz>(id);
-
-			if (mecz == null)
-			{
-				return NotFound();
-			}
-
-			var success = _DataAccess.RemoveItem(mecz);
-
-			if (success)
-			{
-				return Ok();
-			}
-			else
-			{
-				return NotFound();
-			}
+			return TryDelete(id);
 		}
 	}
 }

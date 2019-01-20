@@ -11,43 +11,37 @@ namespace WROCERBackend.Controller
 {
 	[Route("api/[controller]")]
 	[ApiController]
-	public class PozycjaController : BaseController<DataPozycja>
+	public class SkladTypController : BaseController<DataSklad>
 	{
-		public PozycjaController(IDataAccess dataAccess)
+		public SkladTypController(IDataAccess dataAccess)
 		{
 			_DataAccess = dataAccess;
 		}
-
-		// GET: api/Pozycja
+		// GET: api/SkladTyp
 		[HttpGet]
-		public ActionResult<IEnumerable<DataPozycja>> Get()
+		public ActionResult<IEnumerable<DataSklad>> Get()
 		{
 			return Ok(GetAll());
 		}
 
-		// GET: api/Pozycja/5
-		[HttpGet("{id}", Name = "GetPozycja")]
-		public ActionResult<DataPozycja> Get(int id)
+		// GET: api/SkladTyp/5
+		[HttpGet("{id}", Name = "GetSkladTyp")]
+		public ActionResult<DataSklad> Get(int id)
 		{
 			return TryGet(id);
 		}
 
-		// POST: api/Pozycja
+		// POST: api/SkladTyp
 		[HttpPost]
-		public ActionResult Post([FromBody] DataPozycja value)
+		public ActionResult Post([FromBody] DataSklad value)
 		{
 			return TryPost(value);
 		}
 
-		// PUT: api/Pozycja/5
+		// PUT: api/SkladTyp/5
 		[HttpPut("{id}")]
-		public ActionResult Put(int id, [FromBody] DataPozycja value)
+		public ActionResult Put(int id, [FromBody] DataSklad value)
 		{
-			if (!ModelState.IsValid)
-			{
-				return BadRequest(ModelState);
-			}
-
 			return TryPut(id, value);
 		}
 

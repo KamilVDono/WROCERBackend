@@ -11,10 +11,8 @@ namespace WROCERBackend.Controller
 {
 	[Route("api/[controller]")]
 	[ApiController]
-	public class SkladController : ControllerBase
+	public class SkladController : BaseController<DataGracz>
 	{
-		private readonly IDataAccess _DataAccess;
-
 		public SkladController(IDataAccess dataAccess)
 		{
 			_DataAccess = dataAccess;
@@ -100,40 +98,14 @@ namespace WROCERBackend.Controller
 		[HttpPut("{id}")]
 		public ActionResult Put(int id, [FromBody] DataGracz value)
 		{
-			if (!ModelState.IsValid)
-			{
-				return BadRequest(ModelState);
-			}
-
-			if (value == null || _DataAccess.UpdateItem(value) == false)
-			{
-				return NotFound();
-			}
-
-			return Ok();
+			return TryPut(id, value);
 		}
 
 		// DELETE: api/ApiWithActions/5
 		[HttpDelete("{id}")]
 		public ActionResult Delete(int id)
 		{
-			var gracz = _DataAccess.GetItem<DataGracz>(id);
-
-			if (gracz == null)
-			{
-				return NotFound();
-			}
-
-			var success = _DataAccess.RemoveItem(gracz);
-
-			if (success)
-			{
-				return Ok();
-			}
-			else
-			{
-				return NotFound();
-			}
+			return TryDelete(id);
 		}
 	}
 }
