@@ -23,9 +23,14 @@ namespace WROCERBackend.Controller
 		}
 
 		// POST: api/Uzytkownik
-		[HttpPost]
-		public ActionResult Post([FromBody] DataUzytkownik value)
+		[HttpPost("typ/{typId}")]
+		public ActionResult Post(int typId, [FromBody] DataUzytkownik value)
 		{
+			var typ = _DataAccess.GetItem<DataUzytkownikTyp>(typId);
+			if (typ == null) return NotFound();
+
+			value.Typ = typ;
+
 			return TryPost(value);
 		}
 

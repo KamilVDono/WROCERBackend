@@ -23,9 +23,18 @@ namespace WROCERBackend.Controller
 		}
 
 		// POST: api/Zawodnik
-		[HttpPost]
-		public ActionResult Post([FromBody] DataZawodnik value)
+		[HttpPost("pozycja/{idPozycja}/druzyna/{idDruzyna}")]
+		public ActionResult Post(int idPozycja, int idDruzyna, [FromBody] DataZawodnik value)
 		{
+			var pozycja = _DataAccess.GetItem<DataPozycja>(idPozycja);
+			if (pozycja == null) return NotFound();
+
+			var druzyna = _DataAccess.GetItem<DataDruzyna>(idDruzyna);
+			if (druzyna == null) return NotFound();
+
+			value.Pozycja = pozycja;
+			value.Druzyna = druzyna;
+
 			return TryPost(value);
 		}
 
