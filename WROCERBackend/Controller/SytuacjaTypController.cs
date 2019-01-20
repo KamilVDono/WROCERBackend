@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using WROCERBackend.Model.DataModel;
 
@@ -13,7 +9,6 @@ namespace WROCERBackend.Controller
 	public class SytuacjaTypController : BaseController<DataSytuacjaTyp>
 	{
 		// GET: api/SytuacjaTyp
-		[HttpGet]
 		[HttpGet]
 		public ActionResult<IEnumerable<DataSytuacjaTyp>> Get()
 		{
