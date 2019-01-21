@@ -109,7 +109,7 @@ namespace WROCERBackend.Model.DataDirectAccess
 				return list().Cast<T>();
 			}
 
-			return null;
+			return new List<T>();
 		}
 
 		public T GetItem<T>(long id) where T : AbstractDataModel

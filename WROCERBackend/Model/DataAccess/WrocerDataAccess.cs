@@ -7,6 +7,9 @@ using WROCERBackend.Model.DataModel;
 
 namespace WROCERBackend.Model.DataAccess
 {
+	/// <summary>
+	/// WROCER data access.
+	/// </summary>
 	public class WrocerDataAccess : IDataAccess
 	{
 		private readonly List<IDataDirectAccess> _DirectAccesses = new List<IDataDirectAccess>();

@@ -9,6 +9,11 @@ using WROCERBackend.Utils;
 
 namespace WROCERBackend.Controller
 {
+	/// <summary>
+	/// Base class for controllers in WROCERBackend project.
+	/// Provide basic implementation of controllers functions.
+	/// </summary>
+	/// <typeparam name="T">Type of Data Model mainly used by controller</typeparam>
 	public class BaseController<T> : ControllerBase where T : AbstractDataModel
 	{
 		protected IDataAccess _DataAccess;

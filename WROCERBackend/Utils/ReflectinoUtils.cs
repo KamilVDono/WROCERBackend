@@ -8,6 +8,12 @@ namespace WROCERBackend.Utils
 {
 	public static class ReflectinoUtils
 	{
+		/// <summary>
+		/// Copy properties from source object to destination object.
+		/// Objects can have different types and only common properties will be copied.
+		/// </summary>
+		/// <param name="source"></param>
+		/// <param name="destination"></param>
 		public static void CopyProperties(this object source, object destination)
 		{
 			// If any this null throw an exception

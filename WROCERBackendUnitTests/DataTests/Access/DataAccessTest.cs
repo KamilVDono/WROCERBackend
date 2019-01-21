@@ -1,21 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using WROCERBackend.Model.DataAccess;
 using WROCERBackend.Model.DataDirectAccess;
 using WROCERBackend.Model.DataModel;
+using WROCERBackendUnitTests.DataTests.DirectAccess;
 using Xunit;
 
-namespace WROCERBackendUnitTests.DataTests.DirectAccess
+namespace WROCERBackendUnitTests.DataTests.Access
 {
-	public class FakeDatabaseTest
+	public class DataAccessTest
 	{
-		FakeDatabase _Database;
+		WrocerDataAccess _Database;
 
-		public FakeDatabaseTest()
+		public DataAccessTest()
 		{
 			Dictionary<Type, List<AbstractDataModel>> _Data = new Dictionary<Type, List<AbstractDataModel>>();
 			FakeDatabase.FillData(_Data);
-			_Database = new FakeDatabase(_Data);
+			var fakeDataBase = new FakeDatabase(_Data);
+			_Database = new WrocerDataAccess(new List<IDataDirectAccess>(){ fakeDataBase });
 		}
 
 		[Fact]
@@ -114,7 +118,7 @@ namespace WROCERBackendUnitTests.DataTests.DirectAccess
 		[Fact]
 		public void AddItem_WithSameId()
 		{
-			bool success = _Database.AddItem<DataSezon>(new DataSezon(){ID = 1, Rok = 2020});
+			bool success = _Database.AddItem<DataSezon>(new DataSezon() { ID = 1, Rok = 2020 });
 
 			Assert.False(success);
 		}
@@ -122,7 +126,7 @@ namespace WROCERBackendUnitTests.DataTests.DirectAccess
 		[Fact]
 		public void AddItem_NewWithID()
 		{
-			bool success = _Database.AddItem<DataSezon>(new DataSezon() { ID = 3, Rok = 2020});
+			bool success = _Database.AddItem<DataSezon>(new DataSezon() { ID = 3, Rok = 2020 });
 
 			Assert.True(success);
 		}
@@ -131,11 +135,11 @@ namespace WROCERBackendUnitTests.DataTests.DirectAccess
 		public void AddItem_NewWithoutID()
 		{
 			long biggestId = _Database.GetAll<DataSezon>().Max(i => i.ID);
-			var item = new DataSezon() {Rok = 2020};
+			var item = new DataSezon() { Rok = 2020 };
 			bool success = _Database.AddItem<DataSezon>(item);
 
 			Assert.True(success);
-			Assert.Equal(biggestId+1, item.ID);
+			Assert.Equal(biggestId + 1, item.ID);
 		}
 
 		[Fact]
@@ -149,7 +153,7 @@ namespace WROCERBackendUnitTests.DataTests.DirectAccess
 		[Fact]
 		public void UpdateItem_NoExisting()
 		{
-			var item = new DataSezon() {ID = 4, Rok = 2020};
+			var item = new DataSezon() { ID = 4, Rok = 2020 };
 			//_Database.AddItem(item);
 			item.Rok = 2021;
 			bool success = _Database.UpdateItem<DataSezon>(item);
@@ -174,7 +178,7 @@ namespace WROCERBackendUnitTests.DataTests.DirectAccess
 		[Fact]
 		public void Item_Eq()
 		{
-			var item1 = new DataSezon() {ID = 1};
+			var item1 = new DataSezon() { ID = 1 };
 			var item2 = new DataSezon() { ID = 1 };
 
 			Assert.True(item1 == item2);
