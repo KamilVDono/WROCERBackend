@@ -3,9 +3,14 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28010.2046
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WROCERBackend", "WROCERBackend\WROCERBackend.csproj", "{82E88D9B-8C76-464C-A9CE-AA49CD4D786A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WROCERBackend", "WROCERBackend\WROCERBackend.csproj", "{82E88D9B-8C76-464C-A9CE-AA49CD4D786A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WROCERBackendUnitTests", "WROCERBackendUnitTests\WROCERBackendUnitTests.csproj", "{20E23DF8-A29C-4499-A43D-2AAA2324C598}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WROCERBackendUnitTests", "WROCERBackendUnitTests\WROCERBackendUnitTests.csproj", "{20E23DF8-A29C-4499-A43D-2AAA2324C598}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatabaseFiller", "DatabaseFiller\DatabaseFiller.csproj", "{8CADA017-8BF2-4FE9-95FE-51F8602979E9}"
+	ProjectSection(ProjectDependencies) = postProject
+		{82E88D9B-8C76-464C-A9CE-AA49CD4D786A} = {82E88D9B-8C76-464C-A9CE-AA49CD4D786A}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +26,10 @@ Global
 		{20E23DF8-A29C-4499-A43D-2AAA2324C598}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{20E23DF8-A29C-4499-A43D-2AAA2324C598}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{20E23DF8-A29C-4499-A43D-2AAA2324C598}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8CADA017-8BF2-4FE9-95FE-51F8602979E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8CADA017-8BF2-4FE9-95FE-51F8602979E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8CADA017-8BF2-4FE9-95FE-51F8602979E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8CADA017-8BF2-4FE9-95FE-51F8602979E9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
