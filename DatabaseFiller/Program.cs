@@ -156,7 +156,10 @@ namespace DatabaseFiller
 				{
 					DataUrodzenia = (new DateTime(1990, 10, 21).Ticks),
 					Imie = "Janusz",
-
+					Nazwisko = "Januszowski",
+					NumerKoszulki = 99,
+					Pozycja = Pozycja[0],
+					Druzyna = Druzyna[0]
 				}
 			};
 			FillDatabaseZawodnik(Zawodnik);
