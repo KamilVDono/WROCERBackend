@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
+using WROCERBackend.Model.DataAccess;
 using WROCERBackend.Model.DataModel;
 
 namespace WROCERBackend.Controller
@@ -8,6 +9,11 @@ namespace WROCERBackend.Controller
 	[ApiController]
 	public class ZawodnikController : BaseController<DataZawodnik>
 	{
+		public ZawodnikController(IDataAccess dataAccess)
+		{
+			_DataAccess = dataAccess;
+		}
+
 		// GET: api/Zawodnik
 		[HttpGet]
 		public ActionResult<IEnumerable<DataZawodnik>> Get()
