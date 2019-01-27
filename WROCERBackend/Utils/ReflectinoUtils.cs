@@ -57,5 +57,33 @@ namespace WROCERBackend.Utils
 				targetProperty.SetValue(destination, srcProp.GetValue(source, null), null);
 			}
 		}
+
+		public static void NullReferences(this object obj)
+		{
+			if (ReferenceEquals(obj, null))
+			{
+				return;
+			}
+
+			Type type = obj.GetType();
+			PropertyInfo[] props = type.GetProperties();
+			foreach (var propertyInfo in props)
+			{
+				if (!propertyInfo.CanWrite)
+				{
+					continue;
+				}
+				if (propertyInfo.GetSetMethod(true) != null &&
+				    propertyInfo.GetSetMethod(true).IsPrivate)
+				{
+					continue;
+				}
+				if (propertyInfo.PropertyType.IsClass == false)
+				{
+					continue;
+				}
+				propertyInfo.SetValue(obj, null, null);
+			}
+		}
 	}
 }

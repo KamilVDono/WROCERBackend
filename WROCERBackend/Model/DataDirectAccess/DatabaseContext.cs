@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+
 using WROCERBackend.Model.DataModel;
+using WROCERBackend.Utils;
+
 
 namespace WROCERBackend.Model.DataDirectAccess
 {
@@ -14,18 +18,18 @@ namespace WROCERBackend.Model.DataDirectAccess
 		{
 			_DataDictionaryGet = new Dictionary<Type, Func<IEnumerable<AbstractDataModel>>>()
 			{
-				{ typeof(DataDruzyna), () => DataDruzynas.Cast<AbstractDataModel>().AsEnumerable()},
-				{ typeof(DataGracz), () => DataGraczs.Cast<AbstractDataModel>().AsEnumerable()},
-				{ typeof(DataMecz), () => DataMeczs.Cast<AbstractDataModel>().AsEnumerable()},
+				{ typeof(DataDruzyna), () => EntityFrameworkQueryableExtensions.Include<DataDruzyna>(DataDruzynas, "Trener").Cast<AbstractDataModel>().AsEnumerable()},
+				{ typeof(DataGracz), () => EntityFrameworkQueryableExtensions.Include<DataGracz>(DataGraczs.Include("Sklad").Include("Pozycja").Include("Zawodnik"), "Raport").Cast<AbstractDataModel>().AsEnumerable()},
+				{ typeof(DataMecz), () => EntityFrameworkQueryableExtensions.Include<DataMecz>(DataMeczs.Include("Sedzia").Include("Gospodarz").Include("Gosc"), "Sezon").Cast<AbstractDataModel>().AsEnumerable()},
 				{ typeof(DataPozycja), () => DataPozycjas.Cast<AbstractDataModel>().AsEnumerable()},
-				{ typeof(DataRaport), () => DataRaports.Cast<AbstractDataModel>().AsEnumerable()},
+				{ typeof(DataRaport), () => EntityFrameworkQueryableExtensions.Include<DataRaport>(DataRaports, "Mecz").Cast<AbstractDataModel>().AsEnumerable()},
 				{ typeof(DataSezon), () => DataSezons.Cast<AbstractDataModel>().AsEnumerable()},
-				{ typeof(DataSytuacjaMeczowa), () => DataSytuacjaMeczowas.Cast<AbstractDataModel>().AsEnumerable()},
+				{ typeof(DataSytuacjaMeczowa), () => EntityFrameworkQueryableExtensions.Include<DataSytuacjaMeczowa>(DataSytuacjaMeczowas.Include("Gracz"), "Typ").Cast<AbstractDataModel>().AsEnumerable()},
 				{ typeof(DataSytuacjaTyp), () => DataSytuacjaTyps.Cast<AbstractDataModel>().AsEnumerable()},
-				{ typeof(DataUzytkownik), () => DataUzytkowniks.Cast<AbstractDataModel>().AsEnumerable()},
+				{ typeof(DataUzytkownik), () => EntityFrameworkQueryableExtensions.Include<DataUzytkownik>(DataUzytkowniks, "Typ").Cast<AbstractDataModel>().AsEnumerable()},
 				{ typeof(DataUzytkownikTyp), () => DataUzytkownikTyps.Cast<AbstractDataModel>().AsEnumerable()},
-				{ typeof(DataZawodnik), () => DataZawodniks.Cast<AbstractDataModel>().AsEnumerable()},
-				{ typeof(DataZmiana), () => DataZmianas.Cast<AbstractDataModel>().AsEnumerable()},
+				{ typeof(DataZawodnik), () => EntityFrameworkQueryableExtensions.Include<DataZawodnik>(DataZawodniks.Include("Pozycja"), "Druzyna").Cast<AbstractDataModel>().AsEnumerable()},
+				{ typeof(DataZmiana), () => EntityFrameworkQueryableExtensions.Include<DataZmiana>(DataZmianas.Include("Schodzacy"), "Wchodzacy").Cast<AbstractDataModel>().AsEnumerable()},
 				{ typeof(DataSklad), () => DataSklads.Cast<AbstractDataModel>().AsEnumerable()},
 			};
 
@@ -81,19 +85,19 @@ namespace WROCERBackend.Model.DataDirectAccess
 			};
 		}
 
-		public DbSet<DataDruzyna> DataDruzynas { get; set; }
-		public DbSet<DataGracz> DataGraczs { get; set; }
-		public DbSet<DataMecz> DataMeczs { get; set; }
-		public DbSet<DataPozycja> DataPozycjas { get; set; }
-		public DbSet<DataRaport> DataRaports { get; set; }
-		public DbSet<DataSezon> DataSezons { get; set; }
-		public DbSet<DataSytuacjaMeczowa> DataSytuacjaMeczowas { get; set; }
-		public DbSet<DataSytuacjaTyp> DataSytuacjaTyps { get; set; }
-		public DbSet<DataUzytkownik> DataUzytkowniks { get; set; }
-		public DbSet<DataUzytkownikTyp> DataUzytkownikTyps { get; set; }
-		public DbSet<DataZawodnik> DataZawodniks { get; set; }
-		public DbSet<DataZmiana> DataZmianas { get; set; }
-		public DbSet<DataSklad> DataSklads { get; set; }
+		public Microsoft.EntityFrameworkCore.DbSet<DataDruzyna> DataDruzynas { get; set; }
+		public Microsoft.EntityFrameworkCore.DbSet<DataGracz> DataGraczs { get; set; }
+		public Microsoft.EntityFrameworkCore.DbSet<DataMecz> DataMeczs { get; set; }
+		public Microsoft.EntityFrameworkCore.DbSet<DataPozycja> DataPozycjas { get; set; }
+		public Microsoft.EntityFrameworkCore.DbSet<DataRaport> DataRaports { get; set; }
+		public Microsoft.EntityFrameworkCore.DbSet<DataSezon> DataSezons { get; set; }
+		public Microsoft.EntityFrameworkCore.DbSet<DataSytuacjaMeczowa> DataSytuacjaMeczowas { get; set; }
+		public Microsoft.EntityFrameworkCore.DbSet<DataSytuacjaTyp> DataSytuacjaTyps { get; set; }
+		public Microsoft.EntityFrameworkCore.DbSet<DataUzytkownik> DataUzytkowniks { get; set; }
+		public Microsoft.EntityFrameworkCore.DbSet<DataUzytkownikTyp> DataUzytkownikTyps { get; set; }
+		public Microsoft.EntityFrameworkCore.DbSet<DataZawodnik> DataZawodniks { get; set; }
+		public Microsoft.EntityFrameworkCore.DbSet<DataZmiana> DataZmianas { get; set; }
+		public Microsoft.EntityFrameworkCore.DbSet<DataSklad> DataSklads { get; set; }
 
 		private readonly Dictionary<Type, Func<IEnumerable<AbstractDataModel>>> _DataDictionaryGet;
 		private readonly Dictionary<Type, Action<AbstractDataModel>> _DataDictionaryUpdate;
@@ -161,6 +165,9 @@ namespace WROCERBackend.Model.DataDirectAccess
 
 				if (list.Contains(item) == false) return false;
 
+				item.NullReferences();
+				_DataDictionaryUpdate[typeof(T)](item);
+				SaveChanges();
 				_DataDictionaryRemove[typeof(T)](item);
 				SaveChanges();
 				return true;
@@ -177,6 +184,16 @@ namespace WROCERBackend.Model.DataDirectAccess
 		public bool HasModel<T>() where T : AbstractDataModel
 		{
 			return HasModel(typeof(T));
+		}
+
+		protected override void OnModelCreating(ModelBuilder modelBuilder)
+		{
+			base.OnModelCreating(modelBuilder);
+			// I know I don't need both statements, and my guess is I need the first, but at this point I don't know anything anymore
+			foreach (var relationship in modelBuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
+			{
+				relationship.DeleteBehavior = DeleteBehavior.ClientSetNull;
+			}
 		}
 	}
 }

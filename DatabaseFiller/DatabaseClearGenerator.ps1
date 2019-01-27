@@ -72,10 +72,11 @@ Foreach($path in $pathes){
     $content4 += "
     private static void FillDatabase"+"$controllerName"+"(List<"+$typ+"> "+"$controllerName"+")
 		{
-			foreach (var dataDruzyna in "+"$controllerName"+")
+            for (int i = 0; i < "+"$controllerName"+".Count; i++)
 			{
-				var json = Serialize(dataDruzyna);
-				SendAsync(BaseUri, ""$controllerName"", json);
+                var json = Serialize("+"$controllerName"+"[i]);
+				var rJSON = SendAsync(BaseUri, ""$controllerName"", json).Result;
+				"+"$controllerName"+"[i] = JsonConvert.DeserializeObject<"+$typ+">(rJSON);
 			}
 		}
     "

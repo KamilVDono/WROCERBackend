@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using WROCERBackend.Model.DataAccess;
 using WROCERBackend.Model.DataModel;
+using System.Data.Entity;
 
 namespace WROCERBackend.Controller
 {
